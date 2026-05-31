@@ -107,11 +107,11 @@ export const IssuesList: React.FC = () => {
       width: 100,
       render: (_: any, record: any) => (
         <Space size="small">
-          <Button 
-            type="text" 
+          <Button
+            type="text"
             size="small"
-            icon={<EyeOutlined />} 
-            onClick={() => navigate(`/issues/${record.id}`)} 
+            icon={<EyeOutlined />}
+            onClick={() => navigate(`/issues/${record.id}`)}
           />
           {(user?.role === 'maintainer' || user?.role === 'admin') && (
             <Popconfirm
@@ -134,7 +134,7 @@ export const IssuesList: React.FC = () => {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
         <div>
           <h1 className="text-2xl font-bold m-0">Issues</h1>
-          <p className="text-gray-500 m-0 text-sm">List view · {total} issues</p>
+          <p className="text-gray-500 m-0 text-sm">List view ({total})</p>
         </div>
         <div className="flex gap-2">
           <Button icon={<AppstoreOutlined />} onClick={() => navigate('/issues')} title="Board view" />

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Button, Form, Input, Select, Skeleton, Popconfirm, Divider, Avatar, Tabs, List, Badge, App as AntdApp } from 'antd';
 import { useParams, useNavigate } from 'react-router-dom';
-import { 
-  useGetIssueByIdQuery, 
-  useUpdateIssueMutation, 
-  useUpdateIssueStatusMutation, 
+import {
+  useGetIssueByIdQuery,
+  useUpdateIssueMutation,
+  useUpdateIssueStatusMutation,
   useDeleteIssueMutation,
   useGetIssueCommentsQuery,
   useAddIssueCommentMutation,
@@ -17,11 +17,11 @@ import {
 import { useGetUsersQuery } from '../../profile/api/userApi';
 import { useAppSelector, useAppDispatch } from '../../../app/hooks';
 import { StatusTag, TypeTag } from '../../../components/ui/Tags';
-import { 
-  ArrowLeftOutlined, 
-  EditOutlined, 
-  DeleteOutlined, 
-  SaveOutlined, 
+import {
+  ArrowLeftOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  SaveOutlined,
   CloseOutlined,
   ClockCircleOutlined,
   CommentOutlined,
@@ -43,7 +43,7 @@ export const IssueDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  
+
   const { user } = useAppSelector((state) => state.auth);
   const { socket, onlineUsers } = useSocket();
 
@@ -68,13 +68,13 @@ export const IssueDetail: React.FC = () => {
   const users = usersData?.data || [];
 
   const isMaintainer = user?.role === 'maintainer' || user?.role === 'admin';
-  const isReporter = issue?.reporterId === user?.id || (issue?.reporter as any)?._id === user?.id || issue?.reporter?.id === user?.id; 
-  const canEdit = isMaintainer || (isReporter && issue?.status === 'open');
+  const isReporter = issue?.reporter_id === user?.id || (issue?.reporter as any)?._id === user?.id || issue?.reporter?.id === user?.id;
+  const canEdit = (isReporter && issue?.status === 'open');
 
   // Multi-tab active online user checks
   const isAssigneeOnline = issue?.assignee_id ? onlineUsers.includes(Number(issue.assignee_id)) : false;
-  const isReporterOnline = issue?.reporter_id ? onlineUsers.includes(Number(issue.reporter_id)) : 
-                          (issue?.reporter?.id ? onlineUsers.includes(Number(issue.reporter.id)) : false);
+  const isReporterOnline = issue?.reporter_id ? onlineUsers.includes(Number(issue.reporter_id)) :
+    (issue?.reporter?.id ? onlineUsers.includes(Number(issue.reporter.id)) : false);
 
   // Socket setup for joining unique room and live comment syncing
   useEffect(() => {
@@ -227,7 +227,7 @@ export const IssueDetail: React.FC = () => {
               <Form.Item name="title" label="Title" rules={[{ required: true }]}>
                 <Input size="large" />
               </Form.Item>
-               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <Form.Item name="type" label="Type" rules={[{ required: true }]}>
                   <Select size="large">
                     <Option value="bug">Bug</Option>
@@ -270,10 +270,10 @@ export const IssueDetail: React.FC = () => {
                   {issue.priority && (
                     <span className={cn(
                       "text-xs font-bold px-2 py-0.5 rounded-full uppercase border",
-                      issue.priority === 'critical' ? 'bg-red-50 text-red-600 border-red-200' : 
-                      issue.priority === 'high' ? 'bg-orange-50 text-orange-600 border-orange-200' :
-                      issue.priority === 'medium' ? 'bg-blue-50 text-blue-600 border-blue-200' :
-                      'bg-gray-50 text-gray-600 border-gray-200'
+                      issue.priority === 'critical' ? 'bg-red-50 text-red-600 border-red-200' :
+                        issue.priority === 'high' ? 'bg-orange-50 text-orange-600 border-orange-200' :
+                          issue.priority === 'medium' ? 'bg-blue-50 text-blue-600 border-blue-200' :
+                            'bg-gray-50 text-gray-600 border-gray-200'
                     )}>
                       {issue.priority}
                     </span>
@@ -298,8 +298,8 @@ export const IssueDetail: React.FC = () => {
 
         <Card variant="borderless" className="shadow-sm border border-gray-100">
           <Tabs defaultActiveKey="comments">
-            <TabPane 
-              tab={<span className="flex items-center gap-2"><CommentOutlined /> Comments</span>} 
+            <TabPane
+              tab={<span className="flex items-center gap-2"><CommentOutlined /> Comments</span>}
               key="comments"
             >
               <List
@@ -327,9 +327,9 @@ export const IssueDetail: React.FC = () => {
               />
 
               <div className="mt-6">
-                <TextArea 
-                  rows={4} 
-                  placeholder="Leave a comment... (Markdown supported)" 
+                <TextArea
+                  rows={4}
+                  placeholder="Leave a comment... (Markdown supported)"
                   value={commentText}
                   onChange={e => setCommentText(e.target.value)}
                   className="mb-3"
@@ -341,9 +341,9 @@ export const IssueDetail: React.FC = () => {
                 </div>
               </div>
             </TabPane>
-            
-            <TabPane 
-              tab={<span className="flex items-center gap-2"><PaperClipOutlined /> Attachments</span>} 
+
+            <TabPane
+              tab={<span className="flex items-center gap-2"><PaperClipOutlined /> Attachments</span>}
               key="attachments"
             >
               <div className="mb-6">
@@ -354,10 +354,10 @@ export const IssueDetail: React.FC = () => {
                   onChange={handleUploadAttachment}
                 />
                 <label htmlFor="attachment-file-input">
-                  <Button 
-                    type="dashed" 
-                    icon={<UploadOutlined />} 
-                    loading={isUploadingAttachment} 
+                  <Button
+                    type="dashed"
+                    icon={<UploadOutlined />}
+                    loading={isUploadingAttachment}
                     onClick={() => document.getElementById('attachment-file-input')?.click()}
                     className="w-full h-20 flex flex-col justify-center items-center gap-1 border-dashed hover:border-primary border-2 rounded-lg"
                   >
@@ -370,7 +370,7 @@ export const IssueDetail: React.FC = () => {
                 loading={isAttachmentsLoading}
                 dataSource={attachments || []}
                 renderItem={(attachment: any) => (
-                  <List.Item 
+                  <List.Item
                     className="hover:bg-gray-50/50 p-3 rounded-lg border-b border-gray-50 last:border-0 transition-colors"
                     actions={[
                       (isMaintainer || attachment.uploaded_by === user?.id) && (
@@ -388,11 +388,11 @@ export const IssueDetail: React.FC = () => {
                   >
                     <List.Item.Meta
                       avatar={
-                        <Avatar 
-                          shape="square" 
-                          icon={<PaperClipOutlined />} 
+                        <Avatar
+                          shape="square"
+                          icon={<PaperClipOutlined />}
                           className="bg-indigo-50 text-indigo-600"
-                          src={attachment.mime_type.startsWith('image/') ? attachment.url : undefined} 
+                          src={attachment.mime_type.startsWith('image/') ? attachment.url : undefined}
                         />
                       }
                       title={
@@ -412,8 +412,8 @@ export const IssueDetail: React.FC = () => {
               />
             </TabPane>
 
-            <TabPane 
-              tab={<span className="flex items-center gap-2"><HistoryOutlined /> History</span>} 
+            <TabPane
+              tab={<span className="flex items-center gap-2"><HistoryOutlined /> History</span>}
               key="history"
             >
               <List
@@ -451,7 +451,7 @@ export const IssueDetail: React.FC = () => {
                 <span className="text-sm font-medium">{issue.assignee_name || 'Unassigned'}</span>
               </div>
             </div>
-            
+
             <div>
               <p className="text-xs font-semibold text-gray-500 uppercase mb-1">Reporter</p>
               <div className="flex items-center gap-2">
@@ -461,7 +461,7 @@ export const IssueDetail: React.FC = () => {
                 <span className="text-sm font-medium">{issue.reporter_name || issue.reporter?.name || 'Unknown'}</span>
               </div>
             </div>
-            
+
             {(isMaintainer || canEdit) && (
               <div className="pt-4 border-t border-gray-100">
                 <p className="text-xs font-semibold text-gray-500 uppercase mb-2">Update Status</p>

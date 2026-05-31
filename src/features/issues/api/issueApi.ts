@@ -14,6 +14,7 @@ export const issueApi = api.injectEndpoints({
           if (params.status) queryParams.append('status', params.status);
           if (params.type) queryParams.append('type', params.type);
           if (params.sort) queryParams.append('sort', params.sort);
+          if (params.priority) queryParams.append('priority', params.priority);
           url += `?${queryParams.toString()}`;
         }
         return url;

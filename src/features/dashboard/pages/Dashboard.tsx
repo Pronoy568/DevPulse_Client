@@ -1,16 +1,16 @@
 import React from 'react';
 import { Card, Col, Row, Skeleton, Tag, Avatar, List, Badge } from 'antd';
-import { 
-  BugOutlined, 
-  CheckCircleOutlined, 
+import {
+  BugOutlined,
+  CheckCircleOutlined,
   UnorderedListOutlined,
   ThunderboltOutlined,
   UserOutlined
 } from '@ant-design/icons';
 import { useGetIssuesQuery } from '../../issues/api/issueApi';
 import { useAppSelector } from '../../../app/hooks';
-import { 
-  PieChart, Pie, Cell, 
+import {
+  PieChart, Pie, Cell,
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as ReTooltip,
   AreaChart, Area,
   ResponsiveContainer,
@@ -197,8 +197,8 @@ export const Dashboard: React.FC = () => {
                     <Cell key={idx} fill={entry.color} />
                   ))}
                 </Pie>
-                <Legend 
-                  verticalAlign="bottom" 
+                <Legend
+                  verticalAlign="bottom"
                   formatter={(value: string) => <span className="text-xs font-medium text-gray-600">{value}</span>}
                 />
                 <ReTooltip />
@@ -233,12 +233,12 @@ export const Dashboard: React.FC = () => {
               <AreaChart data={trendData}>
                 <defs>
                   <linearGradient id="openGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#ef4444" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#ef4444" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#ef4444" stopOpacity={0} />
                   </linearGradient>
                   <linearGradient id="resolvedGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -247,8 +247,8 @@ export const Dashboard: React.FC = () => {
                 <ReTooltip />
                 <Area type="monotone" dataKey="opened" stroke="#ef4444" fill="url(#openGrad)" strokeWidth={2} name="Opened" />
                 <Area type="monotone" dataKey="resolved" stroke="#10b981" fill="url(#resolvedGrad)" strokeWidth={2} name="Resolved" />
-                <Legend 
-                  verticalAlign="bottom" 
+                <Legend
+                  verticalAlign="bottom"
                   formatter={(value: string) => <span className="text-xs font-medium text-gray-600">{value}</span>}
                 />
               </AreaChart>
@@ -266,9 +266,9 @@ export const Dashboard: React.FC = () => {
               renderItem={(issue: any) => (
                 <List.Item className="py-3 border-b border-gray-50 last:border-0" key={issue.id}>
                   <div className="flex items-center gap-3 w-full">
-                    <Avatar 
-                      size="small" 
-                      src={issue.reporter_avatar || issue.assignee_avatar} 
+                    <Avatar
+                      size="small"
+                      src={issue.reporter_avatar || issue.assignee_avatar}
                       icon={<UserOutlined />}
                       className="bg-indigo-100 text-indigo-600 flex-shrink-0"
                     />
@@ -280,15 +280,15 @@ export const Dashboard: React.FC = () => {
                     </div>
                     <div className="flex items-center gap-2 flex-shrink-0">
                       {issue.priority && (
-                        <Tag 
-                          color={issue.priority === 'critical' ? 'red' : issue.priority === 'high' ? 'orange' : issue.priority === 'medium' ? 'blue' : 'default'} 
+                        <Tag
+                          color={issue.priority === 'critical' ? 'red' : issue.priority === 'high' ? 'orange' : issue.priority === 'medium' ? 'blue' : 'default'}
                           className="m-0 border-none font-semibold text-[10px] px-1.5"
                         >
                           {issue.priority?.toUpperCase()}
                         </Tag>
                       )}
-                      <Badge 
-                        status={issue.status === 'resolved' ? 'success' : issue.status === 'in_progress' ? 'processing' : 'error'} 
+                      <Badge
+                        status={issue.status === 'resolved' ? 'success' : issue.status === 'in_progress' ? 'processing' : 'error'}
                         text={<span className="text-xs capitalize">{issue.status?.replace('_', ' ')}</span>}
                       />
                     </div>

@@ -131,15 +131,35 @@ export const AdminPage: React.FC = () => {
   const logColumns = [
     {
       title: 'Timestamp',
-      dataIndex: 'timestamp',
-      key: 'timestamp',
+      dataIndex: 'created_at',
+      key: 'created_at',
+      render: (date: string) => date ? new Date(date).toLocaleString() : 'N/A',
     },
     {
       title: 'User',
-      key: 'message',
+      key: 'user',
       render: (_: any, record: any) => (
-        <span>{record.message}</span>
+        <span>{record.user_name || (record.user_id ? `ID: ${record.user_id}` : 'System')}</span>
       ),
+    },
+    {
+      title: 'Action',
+      dataIndex: 'action',
+      key: 'action',
+      render: (action: string) => <Tag color="blue">{action || 'SYSTEM_EVENT'}</Tag>,
+    },
+    {
+      title: 'Resource',
+      key: 'resource',
+      render: (_: any, record: any) => (
+        <span>{record.resource_type || 'N/A'} {record.resource_id ? `(${record.resource_id})` : ''}</span>
+      ),
+    },
+    {
+      title: 'IP Address',
+      dataIndex: 'ip_address',
+      key: 'ip_address',
+      render: (ip: string) => ip || 'N/A',
     },
   ];
 

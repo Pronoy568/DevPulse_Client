@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
-import { Card, Tag, Avatar, Tooltip, Skeleton, Input } from 'antd';
-import { 
-  BugOutlined, 
-  BulbOutlined, 
+import { Card, Tag, Avatar, Tooltip, Skeleton, Input, Button } from 'antd';
+import {
+  BugOutlined,
+  BulbOutlined,
   SearchOutlined,
-  ClockCircleOutlined
+  ClockCircleOutlined,
+  EyeOutlined,
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { useGetIssuesQuery, useUpdateIssueMutation } from '../api/issueApi';
@@ -64,11 +65,11 @@ export const IssueBoard: React.FC = () => {
     const destCol = sourceStatus === destStatus ? sourceCol : [...columns[destStatus]];
 
     const [movedItem] = sourceCol.splice(source.index, 1);
-    
+
     if (sourceStatus !== destStatus) {
       movedItem.status = destStatus;
     }
-    
+
     destCol.splice(destination.index, 0, movedItem);
 
     setColumns({
@@ -105,13 +106,18 @@ export const IssueBoard: React.FC = () => {
           <h1 className="text-2xl font-bold text-gray-800 m-0">Board</h1>
           <p className="text-gray-500 m-0">Drag and drop issues to update their status</p>
         </div>
-        <Input
-          placeholder="Search issues..."
-          prefix={<SearchOutlined className="text-gray-400" />}
-          className="w-64"
-          allowClear
-          onChange={(e) => setSearch(e.target.value)}
-        />
+        <div>
+          <Input
+            placeholder="Search issues..."
+            prefix={<SearchOutlined className="text-gray-400" />}
+            className="w-64"
+            allowClear
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <Button type="text" icon={<EyeOutlined />} onClick={() => navigate('/issues/list')} className="px-0 text-gray-500 ms-2">
+            Show List
+          </Button>
+        </div>
       </div>
 
       <DragDropContext onDragEnd={onDragEnd}>
@@ -124,7 +130,7 @@ export const IssueBoard: React.FC = () => {
                   {columns[col.id]?.length || 0}
                 </span>
               </div>
-              
+
               <Droppable droppableId={col.id}>
                 {(provided, snapshot) => (
                   <div
@@ -165,11 +171,11 @@ export const IssueBoard: React.FC = () => {
                                   </Tag>
                                 )}
                               </div>
-                              
+
                               <h4 className="font-semibold text-sm text-gray-800 mb-3 line-clamp-2 leading-tight">
                                 {issue.title}
                               </h4>
-                              
+
                               <div className="flex justify-between items-end mt-2">
                                 <div className="flex items-center text-xs text-gray-400 font-medium">
                                   <ClockCircleOutlined className="mr-1" />

@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
 import { Card, Button, Input, Modal, Form, List, Avatar, Tag, Popconfirm, Select, Skeleton, Empty, Row, Col, App as AntdApp } from 'antd';
-import { 
-  TeamOutlined, 
-  PlusOutlined, 
-  DeleteOutlined, 
-  UserAddOutlined, 
+import {
+  TeamOutlined,
+  PlusOutlined,
+  DeleteOutlined,
+  UserAddOutlined,
   UserDeleteOutlined,
   CrownOutlined,
   SolutionOutlined
 } from '@ant-design/icons';
-import { 
-  useGetTeamsQuery, 
-  useCreateTeamMutation, 
-  useDeleteTeamMutation, 
-  useAddTeamMemberMutation, 
-  useRemoveTeamMemberMutation 
+import {
+  useGetTeamsQuery,
+  useCreateTeamMutation,
+  useDeleteTeamMutation,
+  useAddTeamMemberMutation,
+  useRemoveTeamMemberMutation
 } from '../api/teamApi';
 import { useGetUsersQuery } from '../../profile/api/userApi';
 import { useAppSelector } from '../../../app/hooks';
@@ -64,10 +64,10 @@ export const TeamsList: React.FC = () => {
   const handleAddMember = async (values: any) => {
     if (!activeTeamId) return;
     try {
-      await addMember({ 
-        teamId: activeTeamId, 
-        userId: values.userId, 
-        role: values.role || 'member' 
+      await addMember({
+        teamId: activeTeamId,
+        userId: values.userId,
+        role: values.role || 'member'
       }).unwrap();
       message.success('Team member added successfully');
       form.setFieldValue('userId', undefined);
@@ -87,7 +87,7 @@ export const TeamsList: React.FC = () => {
   };
 
   const isOwnerOrAdmin = (team: any) => {
-    return team.owner_id === currentUser?.id || currentUser?.role === 'admin';
+    return team.owner_id === currentUser?.id || currentUser?.role === 'maintainer' || currentUser?.role === 'admin';
   };
 
   if (isLoading) {
@@ -117,9 +117,9 @@ export const TeamsList: React.FC = () => {
           </h1>
           <p className="text-[var(--text-secondary)] mt-1">Collaborate, manage permissions, and link projects with workspaces.</p>
         </div>
-        <Button 
-          type="primary" 
-          icon={<PlusOutlined />} 
+        <Button
+          type="primary"
+          icon={<PlusOutlined />}
           size="large"
           onClick={() => setCreateModalOpen(true)}
         >
@@ -145,7 +145,7 @@ export const TeamsList: React.FC = () => {
                 const membersCount = team.members_count || team.members?.length || 0;
                 return (
                   <Col span={24} key={team.id}>
-                    <Card 
+                    <Card
                       variant="borderless"
                       className={cn(
                         "shadow-sm hover:shadow-md cursor-pointer transition-all border-l-4",
@@ -182,10 +182,10 @@ export const TeamsList: React.FC = () => {
                             cancelText="Cancel"
                             okButtonProps={{ danger: true, loading: isDeletingTeam }}
                           >
-                            <Button 
-                              danger 
-                              type="text" 
-                              icon={<DeleteOutlined />} 
+                            <Button
+                              danger
+                              type="text"
+                              icon={<DeleteOutlined />}
                               onClick={(e) => e.stopPropagation()}
                             />
                           </Popconfirm>
@@ -215,13 +215,13 @@ export const TeamsList: React.FC = () => {
                     <UserAddOutlined className="text-primary" /> Add New Member
                   </h4>
                   <Form layout="inline" onFinish={handleAddMember} className="w-full gap-2">
-                    <Form.Item 
-                      name="userId" 
+                    <Form.Item
+                      name="userId"
                       rules={[{ required: true, message: 'Select a user' }]}
                       className="flex-1 min-w-[200px]"
                     >
-                      <Select 
-                        placeholder="Search users..." 
+                      <Select
+                        placeholder="Search users..."
                         loading={isUsersLoading}
                         showSearch
                         optionFilterProp="label"
@@ -252,7 +252,7 @@ export const TeamsList: React.FC = () => {
               <List
                 dataSource={activeTeam.members || []}
                 renderItem={(member: any) => (
-                  <List.Item 
+                  <List.Item
                     className="py-3 px-1 hover:bg-white/5 rounded-lg transition-colors border-b border-gray-800 last:border-none"
                     actions={[
                       isOwnerOrAdmin(activeTeam) && member.user_id !== activeTeam.owner_id && (
